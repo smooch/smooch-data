@@ -1,0 +1,13 @@
+{
+  "name": "smooch-data",
+  "description": "Service for storing data on smooch events",
+  "keywords": [],
+  "website": "https://smooch.io/",
+  "repository": "https://github.com/smooch/smooch-data",
+  "logo": "https://website.smooch.io/sm_logo_fb.jpg",
+  "env": {
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
