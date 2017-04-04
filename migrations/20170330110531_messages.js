@@ -10,9 +10,10 @@ exports.up = knex => knex.schema.createTable('messages', table => {
   table.string('avatar_url');
   table.string('media_url');
   table.string('media_type');
+  table.string('source');
   table.float('received');
+  table.json('metadata');
   table.json('coordinates');
-  table.json('source');
 });
 
 exports.down = knex => knex.schema.dropTableIfExists('messages');

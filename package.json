@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "7.7.4"
+  },
   "name": "smooch-data",
   "version": "1.0.0",
   "description": "",
@@ -6,13 +9,15 @@
   "scripts": {
     "start": "ENVIRONMENT=production knex migrate:latest && node index",
     "dev": "ENVIRONMENT=development knex migrate:latest && nodemon --inspect index",
+    "rollback": "knex migrate:rollback",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bookshelf": "0.10.3",
+    "body-parser": "1.17.1",
     "dotenv": "4.0.0",
+    "express": "4.15.2",
     "knex": "0.12.9",
     "pg": "6.1.5"
   }

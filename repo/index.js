@@ -2,7 +2,7 @@ const utils = require('./utils');
 
 const knex = require('knex')({
   client: 'pg',
-  connection: process.env.PG_CONNECTION_STRING
+  connection: process.env.DATABASE_URL
 });
 
 module.exports = { upsertAppUser, insertMessages };
@@ -10,6 +10,7 @@ module.exports = { upsertAppUser, insertMessages };
 async function insertMessages(data) {
   const messages = data.messages
     .map(message => utils.removeKeys(message, 'actions'))
+    .map(message => Object.assign(message, {source: message.source.type}))
     .map(utils.parseOnSave)
     .map(message => Object.assign(message, { appuser_id: data.appUser._id }))
     .map(message => knex('messages').insert(message));
@@ -20,10 +21,7 @@ async function insertMessages(data) {
     }) : [])
     .reduce((flat, actions) => flat.concat(actions))
     .map(utils.parseOnSave)
-    .map(action => {
-      console.log('==>', action);
-      knex('actions').insert(action);
-    })
+    .map(action => knex('actions').insert(action));
 
     return Promise.all(messages.concat(actions));
 }
@@ -31,10 +29,9 @@ async function insertMessages(data) {
 async function upsertAppUser(data) {
   const appUser = utils.parseOnSave(utils.removeKeys(data, [
     'clients',
-    'pendingClients'
+    'pendingClients',
+    'devices'
   ]));
-
-  console.log('==>', appUser);
 
   const clients = data.clients.concat(data.pendingClients || [])
     .map(utils.parseOnSave)
